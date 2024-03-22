@@ -4,4 +4,4 @@ import fs from 'fs'
 
 const key = process.env.KEY;
 
-request.get('https://api.mindat.org/geomaterials/?page=1', { 'Authorization': 'Token ' + key }).pipe(fs.createWriteStream('database.json'));
+request.get('https://api.mindat.org/geomaterials/', { headers: { 'Authorization': 'Token ' + key }})
