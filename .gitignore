@@ -1,3 +1,6 @@
+# Ignore mindat rips
+*.json
+
 # Logs
 logs
 *.log
