@@ -20,7 +20,10 @@ KEY=PutYourMindatAPIKeyHere
 
 This repository is configured to automatically exclude .envs, so dont worry about accidentally uploading it to github if you fork it.
 
-Thats it! Run the index.js and it will automatically run each page one by one, outputting the progress to the console, and will output the finalized information into a json file.
+Thats it! Run the index.js (`node index.js`) and it will automatically run each page one by one, outputting the progress to the console, and will output the finalized information into a json file.
+
+![image](img/download_progress.png)
+![image](img/download_finished.png)
 
 You can change what information it pulls and what page it pulls from within the main request.get callback.
 
