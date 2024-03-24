@@ -2,7 +2,7 @@
   "name": "mindat-graphing",
   "version": "1.0.0",
   "description": "",
-  "main": "data.js",
+  "main": "index.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
