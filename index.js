@@ -23,7 +23,6 @@ function pageLoop(page, amt = 0) {
             max = Math.ceil(count / 10);
         }
         let minerals = comped.results;
-        let clamped = [];
         minerals.forEach(min => {
             let newmin = {};
             newmin.id = min.id;
@@ -43,9 +42,8 @@ function pageLoop(page, amt = 0) {
             newmin.gravrep = min.dcalc;
             newmin.iormin = min.rimin;
             newmin.iormax = min.rimax;
-            clamped.push(newmin);
+            collected.push(newmin);
         });
-        collected.push(clamped);
         console.clear();
         console.log(chalk.magentaBright('Mindat ') + 'Data Collector\n');
         console.log(chalk.redBright('Page ') + chalk.yellow(page + '/' + max) + chalk.redBright(' Downloaded..'));
@@ -65,4 +63,4 @@ function pageLoop(page, amt = 0) {
     });
 }
 
-pageLoop(0); // Page number. Change to wherever you wanna start the download
+pageLoop(1); // Page number. Change to wherever you wanna start the download
