@@ -56,11 +56,11 @@ function pageLoop(page, amt = 0) {
             newmin.vhns = proc(min.vhns);
             newmin.densmin = proc(min.dmeas);
             newmin.densmax = proc(min.dmeas2);
-            newmin.densavg = proc(min.dcalc);
+            newmin.denscalc = proc(min.dcalc);
             if (newmin.densmin > 0 && newmin.densmin == newmin.densmax)
                 newmin.dens = newmin.densmax;
             else
-                newmin.dens = proc(newmin.densavg);
+                newmin.dens = proc(newmin.denscalc);
             newmin.iormin = proc(min.rimin);
             newmin.iormax = proc(min.rimax);
             let ior = 0;

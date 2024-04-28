@@ -16,11 +16,12 @@ function start() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
     ctx.fillStyle = "white";
-    const ref = (cvs.width - 2 * marg) / fxd.length;
+    const ref = (cvs.width - 2 * marg) / mnd.length;
     mnd.forEach((min, i) => {
-        if (min.grav > densest.grav) {;
+        if (i == 0)
             densest = min;
-        }
+        else if (densest.dens < min.dens)
+            densest = min;
         // Horizontal Vickers / Vertical Mohs
         // let x1 = map(+min.vhnmin || min.viks, 0, 3000, marg, cvs.width - marg);
         // let x2 = map(+min.vhnmax || min.viks, 0, 3000, marg, cvs.width - marg);
