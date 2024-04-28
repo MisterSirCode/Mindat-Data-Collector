@@ -70,29 +70,44 @@ function densityVsMohs(ctx, marg) {
 }
 
 let mohsTotal = 0;
+let biggestMohs = {};
 let mitems = 0;
 let densTotal = 0;
+let biggestDens = {};
 let ditems = 0;
 let iorTotal = 0;
+let biggestIor = {};
 let ritems = 0;
 let vikTotal = 0;
+let biggestViks = {};
 let vitems = 0;
 
 function randomStats() {
     mnd.forEach((min, i) => {
+        if (i == 0) {
+            biggestMohs = biggestDens = biggestIor = biggestViks = min;
+        }
         if (min.mohs > 0) {
+            if (min.mohs > biggestMohs.mohs)
+                biggestMohs = min;
             mohsTotal += min.mohs;
             mitems++;
         }
         if (min.dens > 0) {
+            if (min.dens > biggestDens.dens)
+                biggestDens = min;
             densTotal += min.dens;
             ditems++;
         }
         if (min.ior > 0) {
+            if (min.ior > biggestIor.ior)
+                biggestIor = min;
             iorTotal += min.ior;
             ritems++;
         }
         if (min.viks > 0) {
+            if (min.viks > biggestViks.viks)
+                biggestViks = min;
             vikTotal += min.viks;
             vitems++;
         }
@@ -105,6 +120,10 @@ function randomStats() {
     console.log(`Density Average: ${Math.round(densAvg * 1000) / 1000}, ${Math.round(densTotal * 1000) / 1000} total (${ditems} species)`);
     console.log(`IOR Average: ${Math.round(iorAvg * 1000) / 1000}, ${Math.round(iorTotal * 1000) / 1000} total (${ritems} species)`);
     console.log(`Vickers Average: ${Math.round(vikAvg * 1000) / 1000}, ${Math.round(vikTotal * 1000) / 1000} total (${vitems} species)`);
+    console.log(`Hardest on the mohs scale: `, biggestMohs);
+    console.log(`Densest Mineral: `, biggestDens);
+    console.log(`Largest IOR: `, biggestIor);
+    console.log(`Hardest on the vickers scale: `, biggestViks);
 }
 
 function start() {
