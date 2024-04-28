@@ -1,6 +1,9 @@
 const cvs = document.querySelector('canvas');
 const ctx = cvs.getContext('2d');
 let mnd = [];
+let densest = {
+    grav: 0
+};
 
 function map(value, in_min, in_max, out_min, out_max) {
     return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -13,31 +16,11 @@ function start() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
     ctx.fillStyle = "white";
-    let fxd = [];
-    mnd.forEach((min, i) => {
-        if ((min.vhnmin > 0 || min.vhnmax > 0) && (min.hmin > 0 || min.hmax > 0)) {
-            let moh = 0;
-            if (min.hmax > 0 && min.hmin > 0) {
-                moh = (min.hmin + min.hmax) / 2;
-            } else { 
-                moh = min.hmin || min.hmax; 
-            }
-            let vik = 0;
-            if (+min.vhnmax > 0 && +min.vhnmin > 0) {
-                vik = ((+min.vhnmin) + (+min.vhnmax)) / 2;
-            } else {
-                vik = +min.vhnmin || +min.vhnmax;
-            }
-            let newmin = min;
-            newmin.mohs = moh;
-            newmin.viks = vik;
-            fxd.push(newmin);
-        }
-    });
-    //console.log(fxd);
     const ref = (cvs.width - 2 * marg) / fxd.length;
-    fxd.forEach((min, i) => {
-
+    mnd.forEach((min, i) => {
+        if (min.grav > densest.grav) {;
+            densest = min;
+        }
         // Horizontal Vickers / Vertical Mohs
         // let x1 = map(+min.vhnmin || min.viks, 0, 3000, marg, cvs.width - marg);
         // let x2 = map(+min.vhnmax || min.viks, 0, 3000, marg, cvs.width - marg);

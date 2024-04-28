@@ -13,6 +13,11 @@ let count = 0;
 let start = 0;
 let max = 0;
 
+function proc(val) {
+    if (typeof (+val || val) == "string") val = val.match(/\d+.\d+|\d+/g);
+    return +val || 0;
+}
+
 // 10 Minerals a page
 function pageLoop(page, amt = 0) {
     request.get(url + '?page=' + page + filters, { headers: { 'Authorization': key }}, (err, res, bdy) => {
@@ -29,33 +34,55 @@ function pageLoop(page, amt = 0) {
             newmin.name = min.name;
             newmin.formula = min.mindat_formula;
             newmin.tenacity = min.tenacity;
-            newmin.hmin = min.hmin;
-            newmin.hmax = min.hmax;
-            newmin.hardtype = min.hardtype;
-            newmin.vhnmin = min.vhnmin;
-            newmin.vhnmax = min.vhnmax;
-            newmin.vhnerror = min.vhnerror;
-            newmin.vhng = min.vhng;
-            newmin.vhns = min.vhns;
-            newmin.gravmin = min.dmeas;
-            newmin.gravmax = min.dmeas2;
-            newmin.gravrep = min.dcalc;
-            newmin.iormin = min.rimin;
-            newmin.iormax = min.rimax;
+            newmin.hmin = proc(min.hmin);
+            newmin.hmax = proc(min.hmax);
+            let moh = 0;
+            if (newmin.hmax > 0 && newmin.hmin > 0)
+                moh = (newmin.hmin + newmin.hmax) / 2;
+            else
+                moh = newmin.hmin || newmin.hmax; 
+            newmin.mohs = moh;
+            newmin.hardtype = proc(min.hardtype);
+            newmin.vhnmin = proc(min.vhnmin);
+            newmin.vhnmax = proc(min.vhnmax);
+            let vik = 0;
+            if (newmin.vhnmax > 0 && newmin.vhnmin > 0)
+                vik = ((+newmin.vhnmin) + (newmin.vhnmax)) / 2;
+            else
+                vik = newmin.vhnmin || newmin.vhnmax;
+            newmin.viks = vik;
+            newmin.vhnerror = proc(min.vhnerror);
+            newmin.vhng = proc(min.vhng);
+            newmin.vhns = proc(min.vhns);
+            newmin.densmin = proc(min.dmeas);
+            newmin.densmax = proc(min.dmeas2);
+            newmin.densavg = proc(min.dcalc);
+            if (newmin.densmin > 0 && newmin.densmin == newmin.densmax)
+                newmin.dens = newmin.densmax;
+            else
+                newmin.dens = proc(newmin.densavg);
+            newmin.iormin = proc(min.rimin);
+            newmin.iormax = proc(min.rimax);
+            let ior = 0;
+            if (newmin.iormax > 0 && newmin.iormin > 0)
+                ior = ((newmin.iormin) + (newmin.iormax)) / 2;
+            else
+                ior = newmin.iormin || newmin.iormax;
+            newmin.ior = ior;
             collected.push(newmin);
         });
         console.clear();
         console.log(chalk.magentaBright('Mindat ') + 'Data Collector\n');
         console.log(chalk.redBright('Page ') + chalk.yellow(page + '/' + max) + chalk.redBright(' Downloaded..'));
         console.log(' ');
-        if (comped.next == null) {
+        if (comped.next == null || page >= max + 1) {
             fs.writeFile('database.json', JSON.stringify(collected), (err) => {
                 console.clear();
                 console.log(chalk.magentaBright('Mindat ') + 'Data Collector\n');
                 if (err) {
                     console.error(err);
                 } else {
-                    console.log(chalk.greenBright('File Written Successfully with ' + (max - start) + ' Pages (Approx ' + amt * 10 + ' objects) Downloaded'));
+                    console.log(chalk.greenBright('File Written Successfully with ' + (max - start) + ' Pages (' + collected.length + ' objects) Downloaded'));
                     console.log(' ');
                 }
             });
