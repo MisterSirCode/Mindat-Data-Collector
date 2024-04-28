@@ -4,8 +4,8 @@
 }
 
 canvas {
-    width: calc(100vw - 4em);
-    height: calc(50vh - 4em);
+    width: calc(80vh - 4em);
+    height: calc(80vh - 4em);
     margin: 1.5em;
     background-color: white;
 }
