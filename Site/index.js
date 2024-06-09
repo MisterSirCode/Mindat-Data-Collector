@@ -99,10 +99,10 @@ function randomStats() {
             densTotal += min.dens;
             ditems++;
         }
-        if (min.ior > 0) {
-            if (min.ior > biggestIor.ior)
+        if (min.iormax > 0) {
+            if (min.iormax > biggestIor.iormax)
                 biggestIor = min;
-            iorTotal += min.ior;
+            iorTotal += min.iormax;
             ritems++;
         }
         if (min.viks > 0) {
