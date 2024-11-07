@@ -86,8 +86,9 @@ function randomStats() {
     let ites = [];
     let nonites = [];
     mnd.forEach((min, i) => {
-        if (min.name.endsWith('ite')) ites += min.name;
-        else nonites += min.name;
+        // if (min.name.endsWith('ite') || min.name.includes('ite-') || min.name.includes('ite–') || min.name.includes('ite ') || min.name.endsWith('yte')) ites.push(min.name);
+        // else nonites.push(min.name);
+        ites.push(min.name);
         if (i == 0) {
             biggestMohs = biggestDens = biggestIor = biggestViks = min;
         }
@@ -128,6 +129,10 @@ function randomStats() {
     console.log(`Densest Mineral: `, biggestDens);
     console.log(`Largest IOR: `, biggestIor);
     console.log(`Hardest on the vickers scale: `, biggestViks);
+    console.log('All "ite" minerals', ites);
+    console.log('All "nonite" minerals', nonites);
+    console.log('Merged ites: ', ites.join('", "'));
+    // console.log('Merged nonites: ', nonites.join('\n'));
 }
 
 function start() {
