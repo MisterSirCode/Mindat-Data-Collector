@@ -83,7 +83,11 @@ let biggestViks = {};
 let vitems = 0;
 
 function randomStats() {
+    let ites = [];
+    let nonites = [];
     mnd.forEach((min, i) => {
+        if (min.name.endsWith('ite')) ites += min.name;
+        else nonites += min.name;
         if (i == 0) {
             biggestMohs = biggestDens = biggestIor = biggestViks = min;
         }
