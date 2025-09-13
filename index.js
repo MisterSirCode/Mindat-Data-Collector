@@ -5,13 +5,14 @@ import chalk from 'chalk'
 
 const key = 'Token ' + process.env.KEY;
 const filters = '&ima_status=APPROVED&ima_status=GRANDFATHERED&entrytype=0'; // Approved / Grandfathered + Must be a mineral species
-const url = 'https://api.mindat.org/geomaterials/';
+const url = 'https://api.mindat.org/v1/geomaterials/';
 
 const lim = 10;
+let compedTotal = [];
 let collected = [];
 let count = 0;
 let start = 0;
-let max = 0;
+let max = 619;
 
 function proc(val) {
     if (typeof (+val || val) == "string") val = val.match(/\d+.\d+|\d+/g);
@@ -21,11 +22,19 @@ function proc(val) {
 // 10 Minerals a page
 function pageLoop(page, amt = 0) {
     request.get(url + '?page=' + page + filters, { headers: { 'Authorization': key }}, (err, res, bdy) => {
-        let comped = JSON.parse(bdy);
+        console.log(url + '?page=' + page + filters)
+        let comped;
+        try {
+            comped = JSON.parse(bdy);
+        } catch(e) {
+            // Errored - Rate Limited
+            setTimeout(() => {
+                pageLoop(page, amt)
+            }, 5000);
+            return;
+        }
         if (amt == 0) {
             start = page;
-            count = comped.count;
-            max = Math.ceil(count / 10);
         }
         let minerals = comped.results;
         minerals.forEach(min => {
@@ -71,6 +80,7 @@ function pageLoop(page, amt = 0) {
             newmin.ior = ior;
             collected.push(newmin);
         });
+        compedTotal.push(comped);
         console.clear();
         console.log(chalk.magentaBright('Mindat ') + 'Data Collector\n');
         console.log(chalk.redBright('Page ') + chalk.yellow(page + '/' + max) + chalk.redBright(' Downloaded..'));
@@ -86,7 +96,17 @@ function pageLoop(page, amt = 0) {
                     console.log(' ');
                 }
             });
-        } else pageLoop(page + 1, amt + 1);
+            fs.writeFile('database-raw.json', JSON.stringify(compedTotal), (err) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log(chalk.greenBright('Raws Written Successfully with ' + (max - start) + ' Pages (' + compedTotal.length + ' objects) Downloaded'));
+                    console.log(' ');
+                }
+            })
+        } else {
+            pageLoop(page + 1, amt + 1)
+        }
     });
 }
 
