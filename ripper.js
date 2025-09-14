@@ -4,7 +4,8 @@ import fs from 'fs'
 import chalk from 'chalk'
 
 const key = 'Token ' + process.env.KEY;
-const filters = '&ima_status=APPROVED&ima_status=GRANDFATHERED&entrytype=0'; // Approved / Grandfathered + Must be a mineral species
+const searchvariants = true;
+const filters = searchvariants ? '&entrytype=2' : '&entrytype=0&ima_status=APPROVED&ima_status=GRANDFATHERED`'; // Approved / Grandfathered + Must be a mineral species
 const url = 'https://api.mindat.org/v1/geomaterials/';
 
 const lim = 10;
@@ -12,7 +13,7 @@ let compedTotal = [];
 let collected = [];
 let count = 0;
 let start = 0;
-let max = 619;
+let max = 620;
 
 function proc(val) {
     if (typeof (+val || val) == "string") val = val.match(/\d+.\d+|\d+/g);
@@ -33,6 +34,7 @@ function pageLoop(page, amt = 0) {
             }, 5000);
             return;
         }
+        compedTotal.push(comped);
         if (amt == 0) {
             start = page;
         }
@@ -80,7 +82,6 @@ function pageLoop(page, amt = 0) {
             newmin.ior = ior;
             collected.push(newmin);
         });
-        compedTotal.push(comped);
         console.clear();
         console.log(chalk.magentaBright('Mindat ') + 'Data Collector\n');
         console.log(chalk.redBright('Page ') + chalk.yellow(page + '/' + max) + chalk.redBright(' Downloaded..'));
@@ -96,7 +97,7 @@ function pageLoop(page, amt = 0) {
                     console.log(' ');
                 }
             });
-            fs.writeFile('database-raw.json', JSON.stringify(compedTotal[0]), (err) => {
+            fs.writeFile('database-raw.json', JSON.stringify(compedTotal), (err) => {
                 if (err) {
                     console.error(err);
                 } else {
